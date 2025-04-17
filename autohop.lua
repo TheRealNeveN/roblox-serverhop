@@ -1,6 +1,5 @@
-  -- made by neven with much love
 if queue_on_teleport then
-    local src = game:HttpGet("https://raw.githubusercontent.com/<USERNAME>/roblox-serverhop/main/autohop.lua")
+    local src = game:HttpGet("https://raw.githubusercontent.com/TheRealNeveN/roblox-serverhop/main/autohop.lua")
     queue_on_teleport(src)
 end
 
