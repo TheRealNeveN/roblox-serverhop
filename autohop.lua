@@ -143,7 +143,6 @@ Toggle.MouseButton1Click:Connect(function()
                 if searchForTargets() then
                     getgenv().FoundAuraOrChest = true
                     getgenv().ServerHopEnabled = false
-                    Toggle.Text = "Trouvé !"
                     Toggle.BackgroundColor3 = Color3.fromRGB(80, 200, 120)
                     break
                 else
