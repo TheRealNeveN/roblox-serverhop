@@ -1,21 +1,20 @@
--- Roblox ServerHop Script Made By NeveN With Love
+  -- made by neven with much love
+if queue_on_teleport then
+    local src = game:HttpGet("https://raw.githubusercontent.com/<USERNAME>/roblox-serverhop/main/autohop.lua")
+    queue_on_teleport(src)
+end
+
 getgenv().FoundAuraOrChest = getgenv().FoundAuraOrChest or false
 getgenv().ServerHopEnabled = false
 
-if getgenv().FoundAuraOrChest then
-    return
-end
-
-if queue_on_teleport then
-    local source = game:HttpGet("https://raw.githubusercontent.com/TheRealNeveN/roblox-serverhop/main/autohop.lua")
-    queue_on_teleport(source)
-end
+if getgenv().FoundAuraOrChest then return end
 
 
 local CoreGui = game:GetService("CoreGui")
 local HttpService = game:GetService("HttpService")
 local Players = game:GetService("Players")
 local TeleportService = game:GetService("TeleportService")
+local StarterGui = game:GetService("StarterGui")
 local PlaceId = game.PlaceId
 
 
@@ -23,6 +22,7 @@ local guiName = "ServerHopUI"
 if CoreGui:FindFirstChild(guiName) then
     CoreGui:FindFirstChild(guiName):Destroy()
 end
+
 
 local ScreenGui = Instance.new("ScreenGui", CoreGui)
 ScreenGui.Name = guiName
@@ -36,8 +36,7 @@ Frame.BackgroundTransparency = 1
 Frame.Active = true
 Frame.Draggable = true
 
-local UICorner = Instance.new("UICorner", Frame)
-UICorner.CornerRadius = UDim.new(0, 12)
+Instance.new("UICorner", Frame).CornerRadius = UDim.new(0, 12)
 
 for i = 1, 10 do
     Frame.BackgroundTransparency = 1 - (i * 0.08)
@@ -47,16 +46,18 @@ end
 
 pcall(function()
     if readfile and isfile("serverhop_ui_pos.json") then
-        local pos = readfile("serverhop_ui_pos.json")
-        local data = HttpService:JSONDecode(pos)
-        Frame.Position = UDim2.new(0, data.X, 0, data.Y)
+        local pos = HttpService:JSONDecode(readfile("serverhop_ui_pos.json"))
+        Frame.Position = UDim2.new(0, pos.X, 0, pos.Y)
     end
 end)
 
 Frame:GetPropertyChangedSignal("Position"):Connect(function()
     if writefile then
-        local data = { X = Frame.Position.X.Offset, Y = Frame.Position.Y.Offset }
-        writefile("serverhop_ui_pos.json", HttpService:JSONEncode(data))
+        local pos = {
+            X = Frame.Position.X.Offset,
+            Y = Frame.Position.Y.Offset
+        }
+        writefile("serverhop_ui_pos.json", HttpService:JSONEncode(pos))
     end
 end)
 
@@ -65,13 +66,11 @@ local Toggle = Instance.new("TextButton", Frame)
 Toggle.Size = UDim2.new(0.8, 0, 0.4, 0)
 Toggle.Position = UDim2.new(0.1, 0, 0.3, 0)
 Toggle.BackgroundColor3 = Color3.fromRGB(70, 130, 180)
-Toggle.Text = "Acivate Server Hop"
+Toggle.Text = "Unable Server Hop"
 Toggle.TextColor3 = Color3.fromRGB(255, 255, 255)
 Toggle.Font = Enum.Font.GothamBold
 Toggle.TextSize = 14
-
-local ToggleCorner = Instance.new("UICorner", Toggle)
-ToggleCorner.CornerRadius = UDim.new(0, 10)
+Instance.new("UICorner", Toggle).CornerRadius = UDim.new(0, 10)
 
 
 local Close = Instance.new("TextButton", Frame)
@@ -82,27 +81,37 @@ Close.Text = "X"
 Close.TextColor3 = Color3.fromRGB(255, 255, 255)
 Close.Font = Enum.Font.GothamBold
 Close.TextSize = 14
-
-local CloseCorner = Instance.new("UICorner", Close)
-CloseCorner.CornerRadius = UDim.new(1, 0)
+Instance.new("UICorner", Close).CornerRadius = UDim.new(1, 0)
 
 Close.MouseButton1Click:Connect(function()
     ScreenGui:Destroy()
 end)
 
 
-local function containsKeyword(obj, keyword)
-    return obj.Name:lower():find(keyword:lower()) ~= nil
+local function notify(foundType)
+    StarterGui:SetCore("SendNotification", {
+        Title = "🧠 Object Found Successfully",
+        Text = "Un " .. foundType .. " a été détecté !",
+        Duration = 6
+    })
 end
+
 
 local function searchForTargets()
     for _, obj in pairs(game:GetDescendants()) do
-        if containsKeyword(obj, "Aura Egg") or containsKeyword(obj, "Royal Chest") then
-            return true
+        if obj:IsA("BasePart") or obj:IsA("Model") then
+            if obj.Name:lower():find("aura egg") then
+                notify("Aura Egg")
+                return true
+            elseif obj.Name:lower():find("royal chest") then
+                notify("Royal Chest")
+                return true
+            end
         end
     end
     return false
 end
+
 
 local function getServerList()
     local success, result = pcall(function()
@@ -123,9 +132,10 @@ local function serverHop()
     end
 end
 
+
 Toggle.MouseButton1Click:Connect(function()
     getgenv().ServerHopEnabled = not getgenv().ServerHopEnabled
-    Toggle.Text = getgenv().ServerHopEnabled and "Disable Server Hop" or "Activate Server Hop"
+    Toggle.Text = getgenv().ServerHopEnabled and "Disable Server Hop" or "Unable Server Hop"
     Toggle.BackgroundColor3 = getgenv().ServerHopEnabled and Color3.fromRGB(255, 80, 80) or Color3.fromRGB(70, 130, 180)
 
     if getgenv().ServerHopEnabled then
@@ -134,7 +144,7 @@ Toggle.MouseButton1Click:Connect(function()
                 if searchForTargets() then
                     getgenv().FoundAuraOrChest = true
                     getgenv().ServerHopEnabled = false
-                    Toggle.Text = "Found!"
+                    Toggle.Text = "Trouvé !"
                     Toggle.BackgroundColor3 = Color3.fromRGB(80, 200, 120)
                     break
                 else
