@@ -6,7 +6,7 @@ if getgenv().FoundAuraOrChest then
 end
 
 if queue_on_teleport then
-    local source = game:HttpGet("https://raw.githubusercontent.com/<USERNAME>/roblox-serverhop/main/autohop.lua")
+    local source = game:HttpGet("https://raw.githubusercontent.com/TheRealNeveN/roblox-serverhop/main/autohop.lua")
     queue_on_teleport(source)
 end
 
