@@ -1,3 +1,4 @@
+-- Roblox ServerHop Script Made By NeveN With Love
 getgenv().FoundAuraOrChest = getgenv().FoundAuraOrChest or false
 getgenv().ServerHopEnabled = false
 
