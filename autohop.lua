@@ -65,7 +65,7 @@ local Toggle = Instance.new("TextButton", Frame)
 Toggle.Size = UDim2.new(0.8, 0, 0.4, 0)
 Toggle.Position = UDim2.new(0.1, 0, 0.3, 0)
 Toggle.BackgroundColor3 = Color3.fromRGB(70, 130, 180)
-Toggle.Text = "Activer Server Hop"
+Toggle.Text = "Acivate Server Hop"
 Toggle.TextColor3 = Color3.fromRGB(255, 255, 255)
 Toggle.Font = Enum.Font.GothamBold
 Toggle.TextSize = 14
@@ -125,7 +125,7 @@ end
 
 Toggle.MouseButton1Click:Connect(function()
     getgenv().ServerHopEnabled = not getgenv().ServerHopEnabled
-    Toggle.Text = getgenv().ServerHopEnabled and "Désactiver Server Hop" or "Activer Server Hop"
+    Toggle.Text = getgenv().ServerHopEnabled and "Disable Server Hop" or "Activate Server Hop"
     Toggle.BackgroundColor3 = getgenv().ServerHopEnabled and Color3.fromRGB(255, 80, 80) or Color3.fromRGB(70, 130, 180)
 
     if getgenv().ServerHopEnabled then
@@ -134,7 +134,7 @@ Toggle.MouseButton1Click:Connect(function()
                 if searchForTargets() then
                     getgenv().FoundAuraOrChest = true
                     getgenv().ServerHopEnabled = false
-                    Toggle.Text = "Trouvé !"
+                    Toggle.Text = "Found!"
                     Toggle.BackgroundColor3 = Color3.fromRGB(80, 200, 120)
                     break
                 else
